@@ -15,7 +15,7 @@ jobs:
 
       - name: Buscar artigos
         run: |
-          curl "https://api.movidesk.com/public/v1/knowledgeBase/articles?token=${{ secrets.MOVIDESK_TOKEN }}" > artigos.json
+          curl "https://api.movidesk.com/public/v1/articles?token=${{ secrets.MOVIDESK_TOKEN }}" > artigos.json
 
       - name: Salvar alterações
         run: |
