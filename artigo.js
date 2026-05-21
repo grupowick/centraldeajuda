@@ -1,9 +1,9 @@
-const params=
+const params =
 new URLSearchParams(
 window.location.search
 );
 
-const id=
+const id =
 params.get("id");
 
 fetch("artigos-completos.json")
@@ -19,17 +19,23 @@ x=>x.id==id
 
 if(!artigo){
 
-conteudo.innerHTML=
+document
+.getElementById("conteudo")
+.innerHTML=
 "Artigo não encontrado";
 
 return;
 
 }
 
-titulo.innerText=
+document
+.getElementById("titulo")
+.innerText=
 artigo.title;
 
-conteudo.innerHTML=
+document
+.getElementById("conteudo")
+.innerHTML=
 artigo.contentHtml;
 
 });
