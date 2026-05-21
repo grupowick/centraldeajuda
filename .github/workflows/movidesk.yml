@@ -1,0 +1,30 @@
+name: Atualizar artigos Movidesk
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Buscar artigos
+        run: |
+          curl "https://api.movidesk.com/public/v1/knowledgeBase/articles?token=${{ secrets.MOVIDESK_TOKEN }}" > artigos.json
+
+      - name: Salvar alterações
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git add artigos.json
+
+          git diff --quiet && git diff --staged --quiet || (
+            git commit -m "Atualização automática"
+            git push
+          )
