@@ -1,61 +1,178 @@
-let artigos = [];
+let artigos=[];
+let categoriaAtual="Todos";
 
 fetch("artigos.json")
-  .then(response => response.json())
-  .then(dados => {
-    artigos = dados;
-    mostrar(artigos);
-  })
-  .catch(() => {
-    document.getElementById("resultado").innerHTML = `
-      <div class="card">
-        <h2>Erro ao carregar artigos</h2>
-        <p>Não foi possível carregar os dados.</p>
-      </div>
-    `;
-  });
 
-function mostrar(lista){
+.then(r=>r.json())
 
-  if(lista.length === 0){
+.then(dados=>{
 
-    document.getElementById("resultado").innerHTML=`
-      <div class="card">
-        <h2>Nenhum artigo encontrado</h2>
-      </div>
-    `;
+artigos=dados;
 
-    return;
-  }
+criarAbas();
 
-  let html='';
+mostrar();
 
-  lista.forEach(item => {
+})
 
-    html += `
-      <div class="card">
+function criarAbas(){
 
-        <div class="categoria">
-          ${item.menu?.name || "Base"}
-        </div>
+let categorias=["Todos"];
 
-        <h2>${item.title || "Sem título"}</h2>
+artigos.forEach(a=>{
 
-        <p>
-          ${item.summary || "Clique para abrir artigo"}
-        </p>
+if(a.category?.length){
 
-        <button onclick="abrir(${item.id})">
-          Abrir artigo
-        </button>
+a.category.forEach(c=>{
 
-      </div>
-    `;
+if(
+!categorias.includes(
+c.name
+)
+){
 
-  });
+categorias.push(
+c.name
+)
 
-  document.getElementById("resultado").innerHTML = html;
 }
+
+})
+
+}
+
+})
+
+let html='';
+
+categorias.forEach(cat=>{
+
+html+=`
+
+<div
+class="
+aba
+${cat==="Todos"?"ativa":""}
+"
+
+onclick="
+selecionar('${cat}')
+">
+
+${cat}
+
+</div>
+
+`;
+
+})
+
+abas.innerHTML=html;
+
+}
+
+function selecionar(cat){
+
+categoriaAtual=cat;
+
+document
+.querySelectorAll(".aba")
+.forEach(x=>
+x.classList.remove(
+"ativa"
+))
+
+event.target
+.classList.add(
+"ativa"
+)
+
+mostrar();
+
+}
+
+function mostrar(){
+
+const busca=
+pesquisa.value
+.toLowerCase();
+
+let lista=
+artigos.filter(item=>{
+
+let categoriaOk=
+categoriaAtual==="Todos"
+
+||
+
+item.category?.some(
+x=>
+x.name===categoriaAtual
+)
+
+let buscaOk=
+
+(item.title||"")
+.toLowerCase()
+.includes(busca);
+
+return categoriaOk
+&& buscaOk;
+
+})
+
+let html='';
+
+lista.forEach(item=>{
+
+html+=`
+
+<div
+class="card"
+
+onclick="
+abrir(
+${item.id}
+)
+">
+
+<div class="categoria">
+
+${item.category?.[0]?.name
+||
+"Sem categoria"}
+
+</div>
+
+<h2>
+
+${item.title}
+
+</h2>
+
+<p>
+
+${item.summary
+||
+"Clique para abrir"}
+
+</p>
+
+</div>
+
+`;
+
+})
+
+resultado.innerHTML=html;
+
+}
+
+pesquisa
+.addEventListener(
+"input",
+mostrar
+);
 
 function abrir(id){
 
@@ -63,25 +180,3 @@ window.location=
 `artigo.html?id=${id}`
 
 }
-
-document.getElementById("pesquisa")
-.addEventListener("input", function(){
-
- const termo = this.value.toLowerCase();
-
- const filtrado = artigos.filter(item => {
-
-   const titulo =
-   (item.title || "").toLowerCase();
-
-   const resumo =
-   (item.summary || "").toLowerCase();
-
-   return titulo.includes(termo)
-   || resumo.includes(termo);
-
- });
-
- mostrar(filtrado);
-
-});
