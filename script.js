@@ -1,77 +1,136 @@
 let artigos=[];
 let categoriaAtual="Todos";
 
+/*
+PERFIS:
+SAC
+Financeiro
+Negociação
+Comercial
+Backoffice1
+Backoffice2
+Gerente
+Cursos
+Processos
+DOCS
+*/
+
+const perfil=
+localStorage.getItem("perfil")
+|| "SAC";
+
+
+const permissoes={
+
+"SAC":[
+"1. SAC"
+],
+
+"Financeiro":[
+"2. Financeiro",
+"3. Negociação"
+],
+
+"Comercial":[
+"4. Comercial"
+],
+
+"Backoffice1":[
+"5. Backoffice 1"
+],
+
+"Backoffice2":[
+"6. Backoffice 2"
+],
+
+"Gerente":[
+"1. SAC",
+"2. Financeiro",
+"3. Negociação",
+"4. Comercial",
+"5. Backoffice 1",
+"6. Backoffice 2",
+"7. Gerente Comercial",
+"8. Cursos",
+"9. Processos/Sistemas",
+"10. DOCS"
+]
+
+};
+
 fetch("artigos.json")
 
 .then(r=>r.json())
 
 .then(dados=>{
 
-artigos=dados;
+artigos=dados.filter(artigo=>{
+
+if(!artigo.category?.length)
+return false;
+
+return artigo.category.some(c=>
+
+permissoes[perfil]
+?.includes(c.name)
+
+);
+
+});
 
 criarAbas();
 
 mostrar();
 
-})
+});
 
 function criarAbas(){
 
-let categorias=["Todos"];
+const categorias=[];
 
 artigos.forEach(a=>{
 
-if(a.category?.length){
-
-a.category.forEach(c=>{
+a.category?.forEach(cat=>{
 
 if(
-!categorias.includes(
-c.name
-)
+permissoes[perfil]
+.includes(cat.name)
+&&
+!categorias.includes(cat.name)
 ){
 
 categorias.push(
-c.name
+cat.name
 )
 
 }
 
-})
+});
 
-}
+});
 
-})
+categorias.sort();
 
-let html='';
+categorias.unshift("Todos");
 
-categorias.forEach(cat=>{
-
-html+=`
+abas.innerHTML=
+categorias.map(cat=>`
 
 <div
-class="
-aba
-${cat==="Todos"?"ativa":""}
-"
+class="aba
+${cat==="Todos"?"ativa":""}"
 
-onclick="
-selecionar('${cat}')
-">
+onclick="selecionar('${cat}',this)">
 
 ${cat}
 
 </div>
 
-`;
-
-})
-
-abas.innerHTML=html;
+`).join("");
 
 }
 
-function selecionar(cat){
+function selecionar(cat,el){
 
 categoriaAtual=cat;
 
@@ -82,10 +141,8 @@ x.classList.remove(
 "ativa"
 ))
 
-event.target
-.classList.add(
-"ativa"
-)
+el.classList.add(
+"ativa");
 
 mostrar();
 
@@ -97,10 +154,11 @@ const busca=
 pesquisa.value
 .toLowerCase();
 
-let lista=
+const lista=
 artigos.filter(item=>{
 
-let categoriaOk=
+const categoriaOk=
+
 categoriaAtual==="Todos"
 
 ||
@@ -108,9 +166,9 @@ categoriaAtual==="Todos"
 item.category?.some(
 x=>
 x.name===categoriaAtual
-)
+);
 
-let buscaOk=
+const buscaOk=
 
 (item.title||"")
 .toLowerCase()
@@ -119,28 +177,24 @@ let buscaOk=
 return categoriaOk
 && buscaOk;
 
-})
+});
 
-let html='';
+resultado.innerHTML=
 
-lista.forEach(item=>{
-
-html+=`
+lista.map(item=>`
 
 <div
 class="card"
 
 onclick="
-abrir(
-${item.id}
-)
+abrir(${item.id})
 ">
 
 <div class="categoria">
 
-${item.category?.[0]?.name
-||
-"Sem categoria"}
+${item.category
+?.map(x=>x.name)
+.join(" • ")}
 
 </div>
 
@@ -160,11 +214,7 @@ ${item.summary
 
 </div>
 
-`;
-
-})
-
-resultado.innerHTML=html;
+`).join("");
 
 }
 
@@ -172,7 +222,7 @@ pesquisa
 .addEventListener(
 "input",
 mostrar
-);
+)
 
 function abrir(id){
 
