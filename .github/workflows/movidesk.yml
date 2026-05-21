@@ -18,7 +18,7 @@ jobs:
 
       - name: Buscar artigos
         run: |
-          curl -L --fail "https://api.movidesk.com/public/v1/article?token=${{ secrets.MOVIDESK_TOKEN }}&pageSize=100&page=0" -o resposta.json
+          curl -L --fail "https://api.movidesk.com/public/v1/knowledgeBase/article?token=${{ secrets.MOVIDESK_TOKEN }}&pageSize=100&page=0" -o resposta.json
 
       - name: Extrair somente items
         run: |
