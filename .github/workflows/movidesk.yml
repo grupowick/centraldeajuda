@@ -9,13 +9,20 @@ jobs:
   atualizar:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v4
 
       - name: Buscar artigos
         run: |
-          curl -L --fail "https://api.movidesk.com/public/v1/articles?token=${{ secrets.MOVIDESK_TOKEN }}" -o artigos.json
+          curl -L --fail "https://api.movidesk.com/public/v1/article?token=${{ secrets.MOVIDESK_TOKEN }}&pageSize=100&page=0" -o resposta.json
+
+      - name: Extrair somente items
+        run: |
+          cat resposta.json | jq '.items' > artigos.json
 
       - name: Salvar alterações
         run: |
