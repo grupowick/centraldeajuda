@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<link rel="stylesheet"
+href="estilos.css">
+
+</head>
+
+<body>
+
+<div class="topo">
+
+<h1>Central Telmo</h1>
+
+<select id="perfil">
+
+<option>SAC</option>
+<option>Financeiro</option>
+<option>Comercial</option>
+<option>Backoffice1</option>
+<option>Backoffice2</option>
+<option>Gerente</option>
+
+</select>
+
+<br><br>
+
+<button onclick="entrar()">
+
+Entrar
+
+</button>
+
+</div>
+
+<script>
+
+function entrar(){
+
+localStorage.setItem(
+"perfil",
+perfil.value
+)
+
+location=
+"index.html"
+
+}
+
+</script>
+
+</body>
+
+</html>
