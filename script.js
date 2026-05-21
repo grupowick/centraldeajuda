@@ -59,10 +59,8 @@ function mostrar(lista){
 
 function abrir(id){
 
- window.open(
-   `https://telmogrupowick.com.br/kb/article/${id}`,
-   "_blank"
- );
+window.location=
+`artigo.html?id=${id}`
 
 }
 
