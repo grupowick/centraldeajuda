@@ -1,34 +1,55 @@
 body{
 background:#0f172a;
-font-family:Arial;
-padding:30px;
-color:white;
 margin:0;
+padding:30px;
+font-family:Arial;
+color:white;
 }
 
 h1{
+
 text-align:center;
 margin-bottom:25px;
+
 }
 
 input{
+
 width:100%;
-padding:16px;
+padding:18px;
+
 border:none;
+
 border-radius:20px;
+
 font-size:16px;
-margin-bottom:25px;
+
+margin-bottom:30px;
+
+box-sizing:border-box;
+
 }
 
 .card{
 
-background:#1e293b;
+background:#1E293B;
+
 padding:25px;
+
 border-radius:20px;
+
 margin-bottom:15px;
 
 box-shadow:
-0 5px 20px rgba(0,0,0,.3);
+0 6px 25px rgba(0,0,0,.35);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-4px);
 
 }
 
@@ -36,15 +57,15 @@ box-shadow:
 
 display:inline-block;
 
-background:#7c3aed;
+padding:6px 14px;
 
-padding:5px 12px;
+border-radius:20px;
 
-border-radius:30px;
+background:#7C3AED;
 
 font-size:12px;
 
-margin-bottom:10px;
+margin-bottom:12px;
 
 }
 
@@ -58,8 +79,10 @@ border:none;
 
 border-radius:12px;
 
-margin-top:15px;
-
 cursor:pointer;
+
+font-weight:bold;
+
+margin-top:15px;
 
 }
