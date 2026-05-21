@@ -1,112 +1,89 @@
-let artigos=[];
+let artigos = [];
 
 fetch("artigos.json")
-.then(r=>r.json())
-
-.then(dados=>{
-
-artigos=dados;
-
-mostrar(artigos);
-
-})
-
-.catch(()=>{
-
-resultado.innerHTML=`
-
-<div class="card">
-
-<h2>Erro ao carregar</h2>
-
-<p>Não foi possível carregar artigos</p>
-
-</div>
-
-`
-
-})
+  .then(response => response.json())
+  .then(dados => {
+    artigos = dados;
+    mostrar(artigos);
+  })
+  .catch(() => {
+    document.getElementById("resultado").innerHTML = `
+      <div class="card">
+        <h2>Erro ao carregar artigos</h2>
+        <p>Não foi possível carregar os dados.</p>
+      </div>
+    `;
+  });
 
 function mostrar(lista){
 
-if(lista.length===0){
+  if(lista.length === 0){
 
-resultado.innerHTML=`
+    document.getElementById("resultado").innerHTML=`
+      <div class="card">
+        <h2>Nenhum artigo encontrado</h2>
+      </div>
+    `;
 
-<div class="card">
+    return;
+  }
 
-<h2>Nenhum artigo encontrado</h2>
+  let html='';
 
-</div>
+  lista.forEach(item => {
 
-`;
+    html += `
+      <div class="card">
 
-return;
+        <div class="categoria">
+          ${item.menu?.name || "Base"}
+        </div>
 
-}
+        <h2>${item.title || "Sem título"}</h2>
 
-let html='';
+        <p>
+          ${item.summary || "Clique para abrir artigo"}
+        </p>
 
-lista.forEach(item=>{
+        <button onclick="abrir(${item.id})">
+          Abrir artigo
+        </button>
 
-html += `
+      </div>
+    `;
 
-<div class="card">
+  });
 
-<div class="categoria">
-${item.menu?.name || "Base"}
-</div>
-
-<h2>${item.title}</h2>
-
-<p>
-${item.summary || "Clique para abrir artigo"}
-</p>
-
-<button onclick="abrir(${item.id})">
-Abrir artigo
-</button>
-
-</div>
-
-`;
-
-})
-
-resultado.innerHTML=html;
-
+  document.getElementById("resultado").innerHTML = html;
 }
 
 function abrir(id){
 
-window.open(
-`https://telmogrupowick.com.br/kb/article/${id}`,
-"_blank"
-)
+ window.open(
+   `https://telmogrupowick.com.br/kb/article/${id}`,
+   "_blank"
+ );
 
 }
 
-pesquisa.addEventListener("input",()=>{
+document.getElementById("pesquisa")
+.addEventListener("input", function(){
 
-const termo=
-pesquisa.value.toLowerCase();
+ const termo = this.value.toLowerCase();
 
-const filtrado=
-artigos.filter(item=>{
+ const filtrado = artigos.filter(item => {
 
-const titulo=
-(item.title || "")
-.toLowerCase();
+   const titulo =
+   (item.title || "").toLowerCase();
 
-const resumo=
-(item.summary || "")
-.toLowerCase();
+   const resumo =
+   (item.summary || "").toLowerCase();
 
-return titulo.includes(termo)
-|| resumo.includes(termo);
+   return titulo.includes(termo)
+   || resumo.includes(termo);
 
-});
+ });
 
-mostrar(filtrado);
+ mostrar(filtrado);
 
 });
