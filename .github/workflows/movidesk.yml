@@ -16,22 +16,49 @@ jobs:
       - name: Baixar repositório
         uses: actions/checkout@v4
 
-      - name: Buscar artigos Movidesk
+      - name: Buscar lista de artigos
         run: |
-          curl -L --fail "https://api.movidesk.com/public/v1/kb/article?status=1&pageSize=100&page=0&token=${{ secrets.MOVIDESK_TOKEN }}" -o resposta.json
+          curl -L "https://api.movidesk.com/public/v1/kb/article?status=1&pageSize=100&page=0&token=${{ secrets.MOVIDESK_TOKEN }}" -o resposta.json
 
-      - name: Extrair artigos
+      - name: Extrair lista
         run: |
           cat resposta.json | jq '.items' > artigos.json
 
-      - name: Salvar alterações
+      - name: Baixar conteúdo completo
+        run: |
+
+          ids=$(cat artigos.json | jq '.[].id')
+
+          echo "[" > artigos-completos.json
+
+          primeiro=true
+
+          for id in $ids
+          do
+
+            artigo=$(curl -s "https://api.movidesk.com/public/v1/article/$id?token=${{ secrets.MOVIDESK_TOKEN }}")
+
+            if [ "$primeiro" = true ]
+            then
+              primeiro=false
+            else
+              echo "," >> artigos-completos.json
+            fi
+
+            echo "$artigo" >> artigos-completos.json
+
+          done
+
+          echo "]" >> artigos-completos.json
+
+      - name: Salvar
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git add artigos.json
+          git add .
 
           git diff --quiet && git diff --staged --quiet || (
-            git commit -m "Atualização automática dos artigos"
+            git commit -m "Atualizando artigos"
             git push
           )
