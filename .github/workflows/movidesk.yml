@@ -16,11 +16,11 @@ jobs:
       - name: Baixar repositório
         uses: actions/checkout@v4
 
-      - name: Buscar artigos
+      - name: Buscar artigos Movidesk
         run: |
-          curl -L "https://telmogrupowick.com.br/api/public/v1/article?token=${{ secrets.MOVIDESK_TOKEN }}" -o resposta.json
+          curl -L --fail "https://api.movidesk.com/public/v1/kb/article?status=1&pageSize=100&page=0&token=${{ secrets.MOVIDESK_TOKEN }}" -o resposta.json
 
-      - name: Extrair somente items
+      - name: Extrair artigos
         run: |
           cat resposta.json | jq '.items' > artigos.json
 
@@ -32,6 +32,6 @@ jobs:
           git add artigos.json
 
           git diff --quiet && git diff --staged --quiet || (
-            git commit -m "Atualização automática"
+            git commit -m "Atualização automática dos artigos"
             git push
           )
