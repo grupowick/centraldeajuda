@@ -14,8 +14,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Buscar artigos
-  run: |
-    curl -L --fail "https://api.movidesk.com/public/v1/articles?token=${{ secrets.MOVIDESK_TOKEN }}" -o artigos.json
+        run: |
+          curl -L --fail "https://api.movidesk.com/public/v1/articles?token=${{ secrets.MOVIDESK_TOKEN }}" -o artigos.json
 
       - name: Salvar alterações
         run: |
