@@ -5,23 +5,24 @@ fetch("artigos.json")
 
 .then(dados=>{
 
-console.log("Artigos recebidos:",dados);
-
-artigos = Array.isArray(dados) ? dados : [];
+artigos=dados;
 
 mostrar(artigos);
 
 })
 
-.catch((erro)=>{
-
-console.log(erro);
+.catch(()=>{
 
 resultado.innerHTML=`
+
 <div class="card">
-<h2>Erro ao carregar artigos</h2>
-<p>Verifique artigos.json</p>
+
+<h2>Erro ao carregar</h2>
+
+<p>Não foi possível carregar artigos</p>
+
 </div>
+
 `
 
 })
@@ -36,8 +37,6 @@ resultado.innerHTML=`
 
 <h2>Nenhum artigo encontrado</h2>
 
-<p>Os artigos vieram vazios ou o formato está diferente.</p>
-
 </div>
 
 `;
@@ -50,17 +49,19 @@ let html='';
 
 lista.forEach(item=>{
 
-html+=`
+html += `
 
 <div class="card">
 
 <div class="categoria">
-${item.menu?.name || "Base de conhecimento"}
+${item.menu?.name || "Base"}
 </div>
 
-<h2>${item.title || "Sem título"}</h2>
+<h2>${item.title}</h2>
 
-<p>${item.summary || "Sem resumo"}</p>
+<p>
+${item.summary || "Clique para abrir artigo"}
+</p>
 
 <button onclick="abrir(${item.id})">
 Abrir artigo
@@ -70,7 +71,7 @@ Abrir artigo
 
 `;
 
-});
+})
 
 resultado.innerHTML=html;
 
@@ -87,24 +88,25 @@ window.open(
 
 pesquisa.addEventListener("input",()=>{
 
-const filtro=
+const termo=
 pesquisa.value.toLowerCase();
 
-const encontrados=
-artigos.filter(x=>
+const filtrado=
+artigos.filter(item=>{
 
-(x.title || "")
-.toLowerCase()
-.includes(filtro)
+const titulo=
+(item.title || "")
+.toLowerCase();
 
-||
+const resumo=
+(item.summary || "")
+.toLowerCase();
 
-(x.summary || "")
-.toLowerCase()
-.includes(filtro)
+return titulo.includes(termo)
+|| resumo.includes(termo);
 
-)
+});
 
-mostrar(encontrados)
+mostrar(filtrado);
 
 });
