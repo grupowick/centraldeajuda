@@ -1,25 +1,12 @@
 let artigos=[];
 
 fetch("artigos.json")
-
 .then(r=>r.json())
-
 .then(dados=>{
 
 artigos=dados;
 
 mostrar(artigos)
-
-})
-
-.catch(()=>{
-
-resultado.innerHTML=`
-<div class="card">
-<h2>Nenhum artigo encontrado</h2>
-<p>Aguardando sincronização do Movidesk.</p>
-</div>
-`
 
 })
 
@@ -29,11 +16,11 @@ let html='';
 
 lista.forEach(item=>{
 
-html += `
+html+=`
 
 <div class="card">
 
-<h2>${item.subject || "Sem título"}</h2>
+<h2>${item.title || "Sem título"}</h2>
 
 <p>${item.summary || ""}</p>
 
@@ -46,21 +33,3 @@ html += `
 resultado.innerHTML=html;
 
 }
-
-pesquisa.addEventListener("input",()=>{
-
-const filtro=
-pesquisa.value.toLowerCase();
-
-const encontrados=
-artigos.filter(x=>
-
-(x.subject || "")
-.toLowerCase()
-.includes(filtro)
-
-)
-
-mostrar(encontrados)
-
-})
