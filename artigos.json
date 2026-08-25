@@ -655,14 +655,14 @@
     "id": 460034,
     "title": "1115 - Rastrear Objetos Correios",
     "summary": null,
-    "updatedAt": "2026-07-10T11:56:16.6217521Z",
+    "updatedAt": "2026-08-25T13:23:51.7314179Z",
     "createdAt": "2024-03-28T11:34:28.3118831Z",
     "status": 1,
     "tags": [],
     "category": [
       {
         "id": 120873,
-        "name": "1. SAC"
+        "name": "1. Suporte"
       },
       {
         "id": 135650,
@@ -1019,14 +1019,14 @@
     "id": 479499,
     "title": "1105 - Pré - Postagem (Correios)",
     "summary": null,
-    "updatedAt": "2026-07-10T11:55:29.4442768Z",
+    "updatedAt": "2026-08-25T13:23:36.6060753Z",
     "createdAt": "2024-07-03T18:04:59.2133596Z",
     "status": 1,
     "tags": [],
     "category": [
       {
         "id": 120873,
-        "name": "1. SAC"
+        "name": "1. Suporte"
       },
       {
         "id": 128933,
